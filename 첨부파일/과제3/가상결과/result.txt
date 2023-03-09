@@ -1,0 +1,10 @@
+positive
+negative
+negative
+negative
+don't know
+positive
+positive
+don't know
+positive
+positive
