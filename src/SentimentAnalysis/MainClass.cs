@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SentimentAnalysis
 {
@@ -31,17 +32,34 @@ namespace SentimentAnalysis
 
 			for (int i = 0; i < negativeReviews.Length; i++)
 			{
-				negativeReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\" + negativeFileList[i]);
+				negativeReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\negative_reviews\" + negativeFileList[i]);
+				negativeReviews[i] = Regex.Replace(negativeReviews[i], @"\d", "");
 			}
 
 			for (int i = 0; i < positiveReviews.Length; i++)
 			{
-				positiveReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\" + positiveFileList[i]);
+				positiveReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\positive_reviews\" + positiveFileList[i]);
+				positiveReviews[i] = Regex.Replace(positiveReviews[i], @"\d", "");
 			}
 
-			//File.ReadAllLines(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\" + negativeFileList[0]);
-
 			// 리뷰에 포함된 단어 세기 (문자열 토큰화)
+			string[] negativeWords = new string[1000];
+			string[] positiveWords = new string[1000];
+
+			for (int i = 0; i < negativeReviews.Length; i++)
+			{
+				negativeWords = negativeReviews[0].Split(new char[]
+				{ '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"'}, StringSplitOptions.RemoveEmptyEntries);
+			}
+
+			for (int i = 0; i < positiveReviews.Length; i++)
+			{
+				positiveWords = negativeReviews[0].Split(new char[]
+				{ '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"'}, StringSplitOptions.RemoveEmptyEntries);
+			}
+
+
+
 
 
 			// 리뷰에서 한 번도 나타나지 않은 단어 삭제 & 단어 카운트 저장 (파일 쓰기)
