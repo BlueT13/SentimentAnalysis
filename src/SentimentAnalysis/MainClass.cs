@@ -32,38 +32,47 @@ namespace SentimentAnalysis
 
 			for (int i = 0; i < negativeReviews.Length; i++)
 			{
-				negativeReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\negative_reviews\" + negativeFileList[i]);
+				negativeReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\negative_reviews\" +
+					negativeFileList[i]);
 				negativeReviews[i] = Regex.Replace(negativeReviews[i], @"\d", "");
 			}
 
 			for (int i = 0; i < positiveReviews.Length; i++)
 			{
-				positiveReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\positive_reviews\" + positiveFileList[i]);
+				positiveReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\positive_reviews\" +
+					positiveFileList[i]);
 				positiveReviews[i] = Regex.Replace(positiveReviews[i], @"\d", "");
 			}
 
-			// 리뷰에 포함된 단어 세기 (문자열 토큰화)
-			string[] negativeWords = new string[1000];
-			string[] positiveWords = new string[1000];
+			// 백과사전 불러오기(c# hash set)
 
+
+			// 리뷰에 포함된 단어 세기 (문자열 토큰화)
 			for (int i = 0; i < negativeReviews.Length; i++)
 			{
-				negativeWords = negativeReviews[0].Split(new char[]
-				{ '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"'}, StringSplitOptions.RemoveEmptyEntries);
+				string[] negativeReviewWords = negativeReviews[i].Split(
+					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"' },
+					StringSplitOptions.RemoveEmptyEntries);
+
+				// 백과사전에 있는 단어를 토대로 나만의 백과사전 만들기 and 단어 수 세기 (C# Map)
+				for (int j = 0; j < negativeReviewWords.Length; j++)
+				{
+
+				}
 			}
 
 			for (int i = 0; i < positiveReviews.Length; i++)
 			{
-				positiveWords = negativeReviews[0].Split(new char[]
-				{ '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"'}, StringSplitOptions.RemoveEmptyEntries);
+				string[] positiveReviewWords = negativeReviews[i].Split(
+					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"' },
+					StringSplitOptions.RemoveEmptyEntries);
+
+				// 백과사전에 있는 단어를 토대로 나만의 백과사전 만들기 and 단어 수 세기 (C# Map)
+				for (int j = 0; j < positiveReviewWords.Length; j++)
+				{
+
+				}
 			}
-
-
-
-
-
-			// 리뷰에서 한 번도 나타나지 않은 단어 삭제 & 단어 카운트 저장 (파일 쓰기)
-
 
 			// positive, negative 분류 알고리즘 구현 ( 입력: 리뷰 파일, 단어 리스트)
 
