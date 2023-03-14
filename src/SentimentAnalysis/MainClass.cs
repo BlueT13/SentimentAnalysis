@@ -8,19 +8,21 @@ namespace SentimentAnalysis
 	{
 		public static void Main(string[] args)
 		{
+			string fileLocation = "C:\\Users\\YongHo\\SentimentAnalysis\\첨부파일\\과제3\\";
+
 			// list.txt 내용 저장
 			string[] negativeFileList = new string[900];
 			string[] positiveFileList = new string[900];
 
 			int count = 0;
-			foreach (string line in File.ReadLines(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\negative_file_list.txt"))
+			foreach (string line in File.ReadLines(fileLocation + @"negative_file_list.txt"))
 			{
 				negativeFileList[count] = line;
 				count++;
 			}
 
 			count = 0;
-			foreach (string line in File.ReadLines(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\positive_file_list.txt"))
+			foreach (string line in File.ReadLines(fileLocation + @"positive_file_list.txt"))
 			{
 				positiveFileList[count] = line;
 				count++;
@@ -32,15 +34,13 @@ namespace SentimentAnalysis
 
 			for (int i = 0; i < negativeReviews.Length; i++)
 			{
-				negativeReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\negative_reviews\" +
-					negativeFileList[i]);
+				negativeReviews[i] = File.ReadAllText(fileLocation + @"negative_reviews\" + negativeFileList[i]);
 				negativeReviews[i] = Regex.Replace(negativeReviews[i], @"\d", "");
 			}
 
 			for (int i = 0; i < positiveReviews.Length; i++)
 			{
-				positiveReviews[i] = File.ReadAllText(@"C:\Users\YongHo\SentimentAnalysis\첨부파일\과제3\positive_reviews\" +
-					positiveFileList[i]);
+				positiveReviews[i] = File.ReadAllText(fileLocation + @"positive_reviews\" + positiveFileList[i]);
 				positiveReviews[i] = Regex.Replace(positiveReviews[i], @"\d", "");
 			}
 
