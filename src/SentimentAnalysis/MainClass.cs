@@ -45,6 +45,20 @@ namespace SentimentAnalysis
 			}
 
 			// 백과사전 불러오기(c# hash set)
+			HashSet<string> negativeWords = new HashSet<string>();
+			string[] negativeWordsList = File.ReadAllLines(fileLocation + @"negative-words.txt");
+			foreach (string word in negativeWordsList)
+			{
+				negativeWords.Add(word);
+			}
+
+			HashSet<string> positiveWords = new HashSet<string>();
+			string[] positiveWordsList = File.ReadAllLines(fileLocation + @"positive-words.txt");
+			foreach (string word in positiveWordsList)
+			{
+				positiveWords.Add(word);
+			}
+
 
 
 			// 리뷰에 포함된 단어 세기 (문자열 토큰화)
