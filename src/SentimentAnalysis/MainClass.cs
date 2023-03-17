@@ -45,47 +45,55 @@ namespace SentimentAnalysis
 			}
 
 			// 백과사전 불러오기(c# hash set)
-			HashSet<string> negativeWords = new HashSet<string>();
+			Dictionary<string, int> negativeWords = new Dictionary<string, int>();
 			string[] negativeWordsList = File.ReadAllLines(fileLocation + @"negative-words.txt");
 			foreach (string word in negativeWordsList)
 			{
-				negativeWords.Add(word);
+				negativeWords.Add(word, 0);
 			}
 
-			HashSet<string> positiveWords = new HashSet<string>();
+			Dictionary<string, int> positiveWords = new Dictionary<string, int>();
 			string[] positiveWordsList = File.ReadAllLines(fileLocation + @"positive-words.txt");
 			foreach (string word in positiveWordsList)
 			{
-				positiveWords.Add(word);
+				positiveWords.Add(word, 0);
 			}
 
-
-
-			// 리뷰에 포함된 단어 세기 (문자열 토큰화)
+			// 리뷰에 포함된 모든 단어 세기 (문자열 토큰화)
 			for (int i = 0; i < negativeReviews.Length; i++)
 			{
 				string[] negativeReviewWords = negativeReviews[i].Split(
-					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"' },
+					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"', '*', '\n' },
 					StringSplitOptions.RemoveEmptyEntries);
 
 				// 백과사전에 있는 단어를 토대로 나만의 백과사전 만들기 and 단어 수 세기 (C# Map)
 				for (int j = 0; j < negativeReviewWords.Length; j++)
 				{
-
+					if (negativeWords.ContainsKey(negativeReviewWords[j]))
+					{
+						negativeWords[negativeReviewWords[j]]++;
+					}
 				}
+				// 단어 삭제
+
 			}
 
 			for (int i = 0; i < positiveReviews.Length; i++)
 			{
 				string[] positiveReviewWords = negativeReviews[i].Split(
-					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"' },
+					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"', '*', '\n' },
 					StringSplitOptions.RemoveEmptyEntries);
 
 				// 백과사전에 있는 단어를 토대로 나만의 백과사전 만들기 and 단어 수 세기 (C# Map)
 				for (int j = 0; j < positiveReviewWords.Length; j++)
 				{
-
+					if (positiveWords.ContainsKey(positiveReviewWords[j]))
+					{
+						positiveWords[positiveReviewWords[j]]++;
+					}
 				}
+				// 단어 삭제
+
 			}
 
 			// positive, negative 분류 알고리즘 구현 ( 입력: 리뷰 파일, 단어 리스트)
