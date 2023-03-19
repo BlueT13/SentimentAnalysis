@@ -44,7 +44,7 @@ namespace SentimentAnalysis
 				positiveReviews[i] = Regex.Replace(positiveReviews[i], @"\d", "");
 			}
 
-			// 백과사전 불러오기(c# hash set)
+			// 백과사전 불러오기(Map, Dictionary)
 			Dictionary<string, int> negativeWords = new Dictionary<string, int>();
 			string[] negativeWordsList = File.ReadAllLines(fileLocation + @"negative-words.txt");
 			foreach (string word in negativeWordsList)
@@ -59,7 +59,7 @@ namespace SentimentAnalysis
 				positiveWords.Add(word, 0);
 			}
 
-			// 리뷰에 포함된 모든 단어 세기 (문자열 토큰화)
+			// 부정 리뷰에 포함된 모든 단어 세기 (문자열 토큰화)
 			for (int i = 0; i < negativeReviews.Length; i++)
 			{
 				string[] negativeReviewWords = negativeReviews[i].Split(
@@ -74,10 +74,32 @@ namespace SentimentAnalysis
 						negativeWords[negativeReviewWords[j]]++;
 					}
 				}
-				// 단어 삭제
+			}
+			// value값이 0인 단어 삭제
+			List<string> NegativeKeyList = new List<string>();
 
+			foreach (KeyValuePair<string, int> item in negativeWords)
+			{
+				if (item.Value == 0)
+				{
+					NegativeKeyList.Add(item.Key);
+				}
 			}
 
+			foreach (string key in NegativeKeyList)
+			{
+				negativeWords.Remove(key);
+			}
+
+			// 나만의 부정단어장(negativeWords) 출력
+			foreach (KeyValuePair<string, int> item in negativeWords)
+			{
+				Console.WriteLine(item.Key + " " + item.Value);
+			}
+
+
+
+			// 긍정 리뷰에 포함된 모든 단어 세기 (문자열 토큰화)
 			for (int i = 0; i < positiveReviews.Length; i++)
 			{
 				string[] positiveReviewWords = negativeReviews[i].Split(
@@ -91,16 +113,58 @@ namespace SentimentAnalysis
 					{
 						positiveWords[positiveReviewWords[j]]++;
 					}
-				}
-				// 단어 삭제
+				}			
+			}
 
+			// value값이 0인 단어 삭제
+			List<string> PositiveKeyList = new List<string>();
+			foreach (KeyValuePair<string, int> item in positiveWords)
+			{
+				if (item.Value == 0)
+				{
+					PositiveKeyList.Add(item.Key);
+				}
+			}
+			foreach (string key in PositiveKeyList)
+			{
+				positiveWords.Remove(key);
+			}
+
+			// 나만의 긍정단어장(positiveWords) 출력
+			foreach (KeyValuePair<string, int> item in positiveWords)
+			{
+				Console.WriteLine(item.Key + " " + item.Value);
+			}
+
+
+			// 나만의 부정, 긍정 단어장 텍스트 파일로 저장(negative-sentiment, positive-sentiment)
+			string outputFilePath1 = "C:\\Users\\YongHo\\SentimentAnalysis\\첨부파일\\과제3\\실제경과\\negative-sentiment.txt";
+			string outputFilePath2 = "C:\\Users\\YongHo\\SentimentAnalysis\\첨부파일\\과제3\\실제경과\\positive-sentiment.txt";
+
+			using (StreamWriter writer = new StreamWriter(outputFilePath1))
+			{
+				foreach (KeyValuePair<string, int> item in negativeWords)
+				{
+					writer.WriteLine(item.Key + " " + item.Value);
+				}
+			}
+
+			using (StreamWriter writer = new StreamWriter(outputFilePath2))
+			{
+				foreach (KeyValuePair<string, int> item in positiveWords)
+				{
+					writer.WriteLine(item.Key + " " + item.Value);
+				}
 			}
 
 			// positive, negative 분류 알고리즘 구현 ( 입력: 리뷰 파일, 단어 리스트)
 
-			// 10개의 리뷰 파일을 positive, negative, don't know로 분류
 
-			// 결과를 result.txt에 저장
+			// 나만의 백과사전을 기반으로 10개의 리뷰 파일을 positive, negative, don't know로 분류
+
+
+			// 분류 결과를 result.txt에 저장
+
 		}
 	}
 }
