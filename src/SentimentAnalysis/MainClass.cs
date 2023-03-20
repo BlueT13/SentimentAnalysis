@@ -97,12 +97,10 @@ namespace SentimentAnalysis
 				Console.WriteLine(item.Key + " " + item.Value);
 			}
 
-
-
 			// 긍정 리뷰에 포함된 모든 단어 세기 (문자열 토큰화)
 			for (int i = 0; i < positiveReviews.Length; i++)
 			{
-				string[] positiveReviewWords = negativeReviews[i].Split(
+				string[] positiveReviewWords = positiveReviews[i].Split(
 					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"', '*', '\n' },
 					StringSplitOptions.RemoveEmptyEntries);
 
@@ -113,7 +111,7 @@ namespace SentimentAnalysis
 					{
 						positiveWords[positiveReviewWords[j]]++;
 					}
-				}			
+				}
 			}
 
 			// value값이 0인 단어 삭제
@@ -136,10 +134,9 @@ namespace SentimentAnalysis
 				Console.WriteLine(item.Key + " " + item.Value);
 			}
 
-
 			// 나만의 부정, 긍정 단어장 텍스트 파일로 저장(negative-sentiment, positive-sentiment)
-			string outputFilePath1 = "C:\\Users\\YongHo\\SentimentAnalysis\\첨부파일\\과제3\\실제경과\\negative-sentiment.txt";
-			string outputFilePath2 = "C:\\Users\\YongHo\\SentimentAnalysis\\첨부파일\\과제3\\실제경과\\positive-sentiment.txt";
+			string outputFilePath1 = fileLocation + "실제경과\\negative-sentiment.txt";
+			string outputFilePath2 = fileLocation + "실제경과\\positive-sentiment.txt";
 
 			using (StreamWriter writer = new StreamWriter(outputFilePath1))
 			{
@@ -157,14 +154,50 @@ namespace SentimentAnalysis
 				}
 			}
 
-			// positive, negative 분류 알고리즘 구현 ( 입력: 리뷰 파일, 단어 리스트)
-
-
 			// 나만의 백과사전을 기반으로 10개의 리뷰 파일을 positive, negative, don't know로 분류
+			string[] tests = new string[10];
+			string[] testsWords;
+			int positiveCount = 0;
+			int negativeCount = 0;
+			string[] result = new string[10];
 
+			for (int i = 1; i < 11; i++)
+			{
+				tests[i - 1] = File.ReadAllText(fileLocation + @"test\" + string.Format("{0:00}", i) + ".txt");
+				testsWords = tests[i - 1].Split(
+					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"', '*', '\n' },
+					StringSplitOptions.RemoveEmptyEntries);
+				for (int j = 0; j < testsWords.Length; j++)
+				{
+					if (negativeWords.ContainsKey(testsWords[j]))
+					{
+						negativeCount++;
+					}
+
+					else if (positiveWords.ContainsKey(testsWords[j]))
+					{
+						positiveCount++;
+					}
+				}
+
+				// positive, negative 분류 알고리즘
+				if (negativeCount > positiveCount)
+				{
+					result[i - 1] = "negative";
+				}
+				else if (positiveCount > negativeCount)
+				{
+					result[i - 1] = "positive";
+				}
+				else
+				{
+					result[i - 1] = "don't know";
+				}
+				Console.WriteLine(result[i - 1]);
+			}
 
 			// 분류 결과를 result.txt에 저장
-
+			File.WriteAllLinesAsync(fileLocation + "실제경과\\result.txt", result);
 		}
 	}
 }
