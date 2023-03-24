@@ -137,15 +137,16 @@ namespace SentimentAnalysis
 			// 나만의 부정, 긍정 단어장 텍스트 파일로 저장(negative-sentiment, positive-sentiment)
 			string outputFilePath1 = fileLocation + "실제경과\\negative-sentiment.txt";
 			string outputFilePath2 = fileLocation + "실제경과\\positive-sentiment.txt";
-
-			using (StreamWriter writer = new StreamWriter(outputFilePath1))
+            
+			// ***이 코드에 대해서 분석 필요***
+            using (StreamWriter writer = new StreamWriter(outputFilePath1))
 			{
 				foreach (KeyValuePair<string, int> item in negativeWords)
 				{
 					writer.WriteLine(item.Key + " " + item.Value);
 				}
 			}
-
+			
 			using (StreamWriter writer = new StreamWriter(outputFilePath2))
 			{
 				foreach (KeyValuePair<string, int> item in positiveWords)
@@ -169,31 +170,21 @@ namespace SentimentAnalysis
 					StringSplitOptions.RemoveEmptyEntries);
 				for (int j = 0; j < testsWords.Length; j++)
 				{
-					if (negativeWords.ContainsKey(testsWords[j]))
+					// 부정 단어와 긍정 단어가 중복되면 딕셔너리에서 삭제
+					if (negativeWords.ContainsKey(testsWords[j]) == positiveWords.ContainsKey(testsWords[j]))
 					{
 						negativeCount++;
 					}
 
-					else if (positiveWords.ContainsKey(testsWords[j]))
+					// 그리고 중복단어를 삭제한 딕셔너리로 개수 카운트
+					else if ()
 					{
 						positiveCount++;
 					}
 				}
 
-				// positive, negative 분류 알고리즘
-				if (negativeCount > positiveCount)
-				{
-					result[i - 1] = "negative";
-				}
-				else if (positiveCount > negativeCount)
-				{
-					result[i - 1] = "positive";
-				}
-				else
-				{
-					result[i - 1] = "don't know";
-				}
-				Console.WriteLine(result[i - 1]);
+				// positive, negative 분류 알고리즘(단어 빈도수에 로그를 넣은 값으로 계산)
+				
 			}
 
 			// 분류 결과를 result.txt에 저장
