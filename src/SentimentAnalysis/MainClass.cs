@@ -137,16 +137,16 @@ namespace SentimentAnalysis
 			// 나만의 부정, 긍정 단어장 텍스트 파일로 저장(negative-sentiment, positive-sentiment)
 			string outputFilePath1 = fileLocation + "실제경과\\negative-sentiment.txt";
 			string outputFilePath2 = fileLocation + "실제경과\\positive-sentiment.txt";
-            
+
 			// ***이 코드에 대해서 분석 필요***
-            using (StreamWriter writer = new StreamWriter(outputFilePath1))
+			using (StreamWriter writer = new StreamWriter(outputFilePath1))
 			{
 				foreach (KeyValuePair<string, int> item in negativeWords)
 				{
 					writer.WriteLine(item.Key + " " + item.Value);
 				}
 			}
-			
+
 			using (StreamWriter writer = new StreamWriter(outputFilePath2))
 			{
 				foreach (KeyValuePair<string, int> item in positiveWords)
@@ -156,37 +156,52 @@ namespace SentimentAnalysis
 			}
 
 			// 나만의 백과사전을 기반으로 10개의 리뷰 파일을 positive, negative, don't know로 분류
-			string[] tests = new string[10];
-			string[] testsWords;
-			int positiveCount = 0;
-			int negativeCount = 0;
 			string[] result = new string[10];
 
-			for (int i = 1; i < 11; i++)
+			for (int i = 0; i < 10; i++)
 			{
-				tests[i - 1] = File.ReadAllText(fileLocation + @"test\" + string.Format("{0:00}", i) + ".txt");
-				testsWords = tests[i - 1].Split(
+				string test = File.ReadAllText(fileLocation + @"test\" + string.Format("{0:00}", i + 1) + ".txt");
+				string[] testWords = test.Split(
 					new char[] { '.', '?', '!', ' ', ';', ':', ',', '(', ')', '/', '-', '"', '*', '\n' },
 					StringSplitOptions.RemoveEmptyEntries);
-				for (int j = 0; j < testsWords.Length; j++)
+
+				double negativeScore = 0;
+				double positiveScore = 0;
+				for (int j = 0; j < testWords.Length; j++)
 				{
 					// 부정 단어와 긍정 단어가 중복되면 딕셔너리에서 삭제
-					if (negativeWords.ContainsKey(testsWords[j]) == positiveWords.ContainsKey(testsWords[j]))
+					if (negativeWords.ContainsKey(testWords[j]) == positiveWords.ContainsKey(testWords[j]))
 					{
-						negativeCount++;
+						negativeWords.Remove(testWords[j]);
+						positiveWords.Remove(testWords[j]);
 					}
 
 					// 그리고 중복단어를 삭제한 딕셔너리로 개수 카운트
-					else if ()
+					if (negativeWords.ContainsKey(testWords[j]))
 					{
-						positiveCount++;
+						negativeScore += Math.Log(negativeWords[testWords[j]]);
+					}
+					if (positiveWords.ContainsKey(testWords[j]))
+					{
+						positiveScore += Math.Log(positiveWords[testWords[j]]);
 					}
 				}
 
 				// positive, negative 분류 알고리즘(단어 빈도수에 로그를 넣은 값으로 계산)
-				
+				Console.WriteLine("{0} / {1}", negativeScore, positiveScore);
+				if (negativeScore - positiveScore > 20)
+				{
+					result[i] = "negative";
+				}
+				else if (positiveScore - negativeScore > 20)
+				{
+					result[i] = "positive";
+				}
+				else
+				{
+					result[i] = "don't know";
+				}
 			}
-
 			// 분류 결과를 result.txt에 저장
 			File.WriteAllLinesAsync(fileLocation + "실제경과\\result.txt", result);
 		}
